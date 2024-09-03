@@ -21,6 +21,11 @@ dependencies {
     // (in a separate module for demo project and in testMain).
     // With compose.desktop.common you will also lose @Preview functionality
     implementation(compose.desktop.currentOs)
+    implementation("org.jetbrains.androidx.navigation:navigation-compose:2.7.0-alpha07")
+    implementation("com.rabbitmq:amqp-client:5.17.1")
+    implementation("org.slf4j:slf4j-nop:2.0.9")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 }
 
 compose.desktop {

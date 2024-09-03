@@ -1,3 +1,4 @@
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,14 +12,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import java.time.LocalDateTime
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun App() {
-    val screenStack by remember { mutableStateOf(mutableListOf<String>("LoginScreen")) }
-    var currentScreen by remember { mutableStateOf("LoginScreen") }
-    var user by remember { mutableStateOf("") }
-
+//    val screenStack by remember { mutableStateOf(mutableListOf<String>("LoginScreen")) }
+//    var currentScreen by remember { mutableStateOf("LoginScreen") }
+//    var user by remember { mutableStateOf("") }
+//    val messages by remember { mutableStateOf(mutableListOf<Message>()) }
+    val viewModel = MainViewModel()
 
     MaterialTheme {
         Scaffold(topBar = {
@@ -27,25 +29,22 @@ fun App() {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(if (user.isNotEmpty()) "Welcome $user" else "Welcome to the chat app")
+                Text(if (viewModel.state.userName.isNotEmpty()) "Welcome ${viewModel.state.userName}" else "Welcome to the chat app")
             }
         }) {
-            when (currentScreen) {
-                "ChatScreen" -> {
-                    ChatScreen(messages = emptyList()) { message ->
-                        println(message)
+            if (viewModel.state.showLoginscren) {
+                LoginScreen(
+                    onLogin = { userName ->
+                        viewModel.onAction(MainAction.OnFinishLogin(userName))
                     }
-                }
-
-                "LoginScreen" -> {
-                    LoginScreen { username ->
-                        user = username
-                        screenStack.add("ChatScreen")
-                        currentScreen = "ChatScreen"
+                )
+            } else {
+                ChatScreen(
+                    messages = viewModel.state.receivedMessages,
+                    onSendMessage = { message ->
+                        viewModel.onAction(MainAction.SendMessage(message))
                     }
-                }
-
-                else -> {}
+                )
             }
         }
     }

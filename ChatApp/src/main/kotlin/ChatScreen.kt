@@ -10,7 +10,9 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -31,7 +33,11 @@ fun ChatScreen(
                 ) {
                     BasicText(text = "Sender: ${message.sender}")
                     BasicText(text = "Content: ${message.content}")
-                    BasicText(text = "Date: ${message.date.format(formatter)}")
+                    BasicText(
+                        text = "Date: ${
+                            LocalDateTime.ofInstant(message.date, ZoneId.of("UTC")).format(formatter)
+                        }"
+                    )
                 }
             }
         }
@@ -58,11 +64,11 @@ fun ChatScreen(
 @Preview
 private fun ChatScreenPreview() {
     val messages = listOf(
-        Message("Hello!", "Alice", LocalDateTime.now()),
-        Message("Hi, how are you?", "Bob", LocalDateTime.now()),
-        Message("I'm good, thanks!", "Alice", LocalDateTime.now()),
-        Message("What about you?", "Alice", LocalDateTime.now()),
-        Message("I'm fine too.", "Bob", LocalDateTime.now())
+        Message("Hello!", "Alice", Instant.now()),
+        Message("Hi, how are you?", "Bob", Instant.now()),
+        Message("I'm good, thanks!", "Alice", Instant.now()),
+        Message("What about you?", "Alice", Instant.now()),
+        Message("I'm fine too.", "Bob", Instant.now())
     )
 
     MaterialTheme {
