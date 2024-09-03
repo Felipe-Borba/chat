@@ -2,10 +2,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import java.time.Instant
-import java.time.LocalDateTime
 
 class MainViewModel(
 ) : ViewModel() {
@@ -15,10 +16,17 @@ class MainViewModel(
     private val eventChannel = Channel<MainEvent>()
     val events = eventChannel.receiveAsFlow()
 
-    //TODO inject dependancy
     private val queue = RabbitMQ()
 
-    //TODO le a fila de saida do rabit, serializa e mostra na telinha
+    init {
+        viewModelScope.launch {
+            queue.receiveMessages("Entry").collect { message ->
+                print("Leitura file $message")
+                state = state.copy(receivedMessages = state.receivedMessages + message)
+            }
+        }
+    }
+
     fun onAction(action: MainAction) {
         when (action) {
             is MainAction.OnFinishLogin -> {

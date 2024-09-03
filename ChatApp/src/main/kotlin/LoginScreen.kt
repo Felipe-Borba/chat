@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 fun LoginScreen(
     onLogin: (name: String) -> Unit
 ) {
+    //TODO mover isso para o viewModel
     var text by remember { mutableStateOf("") }
 
     Column(

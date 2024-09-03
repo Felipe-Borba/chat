@@ -20,6 +20,7 @@ fun ChatScreen(
     messages: List<Message>,
     onSendMessage: (message: String) -> Unit,
 ) {
+    //TODO mover isso para o viewModel
     var text by remember { mutableStateOf("") }
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
 

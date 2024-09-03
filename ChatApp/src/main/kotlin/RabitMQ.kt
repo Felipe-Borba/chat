@@ -38,26 +38,10 @@ class RabbitMQ(
             channel.queueDeclare(queueName, true, false, false, null)
             val messageBody = objectMapper.writeValueAsBytes(message)
             channel.basicPublish("", queueName, null, messageBody)
-            println("Sent message: $message")
         }
     }
 
-//    fun receiveMessages(queueName: String) {
-//        connection.createChannel().use { channel ->
-//            channel.queueDeclare(queueName, true, false, false, null)
-//
-//            val deliverCallback = DeliverCallback { _, delivery ->
-//                val message: Message = objectMapper.readValue(delivery.body)
-//                println("Received message: $message")
-//            }
-//
-//            channel.basicConsume(queueName, true, deliverCallback, { _ -> })
-//            println("Waiting for messages...")
-//            // Mantém o consumidor ativo para receber mensagens
-//            Thread.sleep(Long.MAX_VALUE)
-//        }
-//    }
-
+    //TODO não retirar a mensagem da fila depois de receber ela para todo mundo poder ver
     suspend fun receiveMessages(queueName: String): Flow<Message> = callbackFlow {
         val channel = connection.createChannel()
         channel.queueDeclare(queueName, true, false, false, null)
