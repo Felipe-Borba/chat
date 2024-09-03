@@ -28,16 +28,13 @@ fun App() {
         }) {
             if (viewModel.state.showLoginscren) {
                 LoginScreen(
-                    onLogin = { userName ->
-                        viewModel.onAction(MainAction.OnFinishLogin(userName))
-                    }
+                    state = viewModel.state,
+                    onAction = { viewModel.onAction(it) }
                 )
             } else {
                 ChatScreen(
-                    messages = viewModel.state.receivedMessages,
-                    onSendMessage = { message ->
-                        viewModel.onAction(MainAction.SendMessage(message))
-                    }
+                    state = viewModel.state,
+                    onAction = { viewModel.onAction(it) }
                 )
             }
         }

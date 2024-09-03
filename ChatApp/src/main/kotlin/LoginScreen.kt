@@ -11,24 +11,22 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun LoginScreen(
-    onLogin: (name: String) -> Unit
+    state: MainState,
+    onAction: (MainAction) -> Unit
 ) {
-    //TODO mover isso para o viewModel
-    var text by remember { mutableStateOf("") }
-
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         TextField(
-            value = text,
-            onValueChange = { text = it },
+            value = state.userName,
+            onValueChange = { onAction(MainAction.ChangeUserName(it)) },
             label = { Text("Username") }
         )
         Spacer(modifier = Modifier.height(16.dp).fillMaxWidth())
         Button(onClick = {
-            onLogin(text)
+            onAction(MainAction.OnFinishLogin)
         }) {
             Text("Login")
         }
@@ -39,6 +37,6 @@ fun LoginScreen(
 @Preview
 private fun LoginScreenPreview() {
     MaterialTheme {
-        LoginScreen { }
+        LoginScreen(state = MainState(), onAction = {})
     }
 }

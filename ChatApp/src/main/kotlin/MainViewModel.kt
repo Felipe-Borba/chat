@@ -30,21 +30,32 @@ class MainViewModel(
     fun onAction(action: MainAction) {
         when (action) {
             is MainAction.OnFinishLogin -> {
-                state = state.copy(
-                    userName = action.userName,
-                    showLoginscren = false
-                )
+                if (state.userName.isNotEmpty())
+                    state = state.copy(
+                        showLoginscren = false
+                    )
             }
 
             is MainAction.SendMessage -> {
                 queue.sendMessage(
                     queueName = "Entry",
                     message = Message(
-                        content = action.message,
+                        content = state.message,
                         sender = state.userName,
                         date = Instant.now()
                     )
                 )
+                state = state.copy(
+                    message = ""
+                )
+            }
+
+            is MainAction.ChangeMessage -> {
+                state = state.copy(message = action.message)
+            }
+
+            is MainAction.ChangeUserName -> {
+                state = state.copy(userName = action.userName)
             }
         }
     }

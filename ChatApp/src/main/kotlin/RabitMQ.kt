@@ -20,6 +20,7 @@ data class Message(
 class RabbitMQ(
     private val host: String = "localhost",
 ) {
+    //TODO change queue to senai server
     private val connectionFactory: ConnectionFactory = ConnectionFactory().apply {
         this.host = host
     }

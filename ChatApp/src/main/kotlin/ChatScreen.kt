@@ -17,18 +17,16 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun ChatScreen(
-    messages: List<Message>,
-    onSendMessage: (message: String) -> Unit,
+    state: MainState,
+    onAction: (MainAction) -> Unit
 ) {
-    //TODO mover isso para o viewModel
-    var text by remember { mutableStateOf("") }
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
 
     Column(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier.weight(1f).padding(16.dp)
         ) {
-            items(messages) { message ->
+            items(state.receivedMessages) { message ->
                 Column(
                     modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
                 ) {
@@ -47,14 +45,17 @@ fun ChatScreen(
             modifier = Modifier.fillMaxWidth().height(50.dp),
         ) {
             TextField(
-                value = text,
-                onValueChange = { text = it },
+                value = state.message,
+                onValueChange = { onAction(MainAction.ChangeMessage(it)) },
                 label = { Text("message") },
                 modifier = Modifier.fillMaxWidth(0.85f)
             )
-            Button(onClick = {
-                onSendMessage(text)
-            }, modifier = Modifier.fillMaxSize()) {
+            Button(
+                onClick = {
+                    onAction(MainAction.SendMessage)
+                },
+                modifier = Modifier.fillMaxSize()
+            ) {
                 Text("Send")
             }
         }
@@ -73,6 +74,6 @@ private fun ChatScreenPreview() {
     )
 
     MaterialTheme {
-        ChatScreen(messages = messages) { }
+        ChatScreen(state = MainState(receivedMessages = messages), onAction = {})
     }
 }
