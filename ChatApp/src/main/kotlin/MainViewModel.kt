@@ -8,8 +8,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.Instant
 
-class MainViewModel(
-) : ViewModel() {
+class MainViewModel() : ViewModel() {
     var state by mutableStateOf(MainState())
         private set
 
@@ -20,7 +19,7 @@ class MainViewModel(
 
     init {
         viewModelScope.launch {
-            queue.receiveMessages("Entry").collect { message ->
+            queue.receiveMessages("Exit").collect { message ->
                 print("Leitura file $message")
                 state = state.copy(receivedMessages = state.receivedMessages + message)
             }
