@@ -42,19 +42,19 @@ fun ChatScreen(
         }
 
         Row(
-            modifier = Modifier.fillMaxWidth().height(50.dp),
+            modifier = Modifier.fillMaxWidth().height(80.dp),
         ) {
             TextField(
                 value = state.message,
                 onValueChange = { onAction(MainAction.ChangeMessage(it)) },
                 label = { Text("message") },
-                modifier = Modifier.fillMaxWidth(0.85f)
+                modifier = Modifier.weight(1f).fillMaxHeight()
             )
             Button(
                 onClick = {
                     onAction(MainAction.SendMessage)
                 },
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxHeight()
             ) {
                 Text("Send")
             }
