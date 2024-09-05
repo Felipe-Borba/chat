@@ -18,6 +18,8 @@ data class Message(
 class RabbitMQ(
     private val host: String = "localhost",
 ) {
+    private val EXCHANGE_NAME = "MessageDistribution";
+
     //TODO change queue to senai server
     private val connectionFactory: ConnectionFactory = ConnectionFactory().apply {
         this.host = host
@@ -42,7 +44,9 @@ class RabbitMQ(
 
     suspend fun receiveMessages(queueName: String): Flow<Message> = callbackFlow {
         val channel = connection.createChannel()
-//        channel.queueDeclare(queueName, true, false, false, null)
+        channel.queueDelete(queueName)
+        channel.queueDeclare(queueName, true, false, false, mapOf("x-expires" to 3600000))
+        channel.queueBind(queueName, EXCHANGE_NAME, "");
 
         val consumer: Consumer = object : DefaultConsumer(channel) {
             override fun handleDelivery(
@@ -57,7 +61,7 @@ class RabbitMQ(
                 }
 
                 // Acknowledge the message to remove it from the queue
-                // channel.basicAck(envelope?.deliveryTag ?: 0, false)
+                 channel.basicAck(envelope?.deliveryTag ?: 0, false)
             }
         }
 

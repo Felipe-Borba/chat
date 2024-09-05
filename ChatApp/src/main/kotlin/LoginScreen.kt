@@ -20,7 +20,7 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center
     ) {
         TextField(
-            value = state.userName,
+            value = state.userName ?: "",
             onValueChange = { onAction(MainAction.ChangeUserName(it)) },
             label = { Text("Username") }
         )

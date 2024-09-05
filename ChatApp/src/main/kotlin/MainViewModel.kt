@@ -17,35 +17,36 @@ class MainViewModel() : ViewModel() {
 
     private val queue = RabbitMQ()
 
-    init {
-        viewModelScope.launch {
-            queue.receiveMessages("Exit").collect { message ->
-                state = state.copy(receivedMessages = state.receivedMessages + message)
-            }
-        }
-    }
-
     fun onAction(action: MainAction) {
         when (action) {
             is MainAction.OnFinishLogin -> {
-                if (state.userName.isNotEmpty())
+                state.userName?.let {
                     state = state.copy(
                         showLoginscren = false
                     )
+
+                    viewModelScope.launch {
+                        queue.receiveMessages(it).collect { message ->
+                            state = state.copy(receivedMessages = state.receivedMessages + message)
+                        }
+                    }
+                }
             }
 
             is MainAction.SendMessage -> {
-                queue.sendMessage(
-                    queueName = "Entry",
-                    message = Message(
-                        content = state.message,
-                        sender = state.userName,
-                        date = Instant.now()
+                state.userName?.let {
+                    queue.sendMessage(
+                        queueName = "Entry",
+                        message = Message(
+                            content = state.message,
+                            sender = it,
+                            date = Instant.now()
+                        )
                     )
-                )
-                state = state.copy(
-                    message = ""
-                )
+                    state = state.copy(
+                        message = ""
+                    )
+                }
             }
 
             is MainAction.ChangeMessage -> {
