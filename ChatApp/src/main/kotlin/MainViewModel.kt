@@ -20,7 +20,6 @@ class MainViewModel() : ViewModel() {
     init {
         viewModelScope.launch {
             queue.receiveMessages("Exit").collect { message ->
-                print("Leitura file $message")
                 state = state.copy(receivedMessages = state.receivedMessages + message)
             }
         }

@@ -1,8 +1,9 @@
 package com.felipeborba;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 
-public class Message {
+public class Message implements Serializable {
     private String content;
     private String sender;
     private ZonedDateTime date;
