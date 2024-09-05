@@ -34,7 +34,7 @@ class RabbitMQ(
 
     fun sendMessage(queueName: String, message: Message) {
         connection.createChannel().use { channel ->
-            channel.queueDeclare(queueName, true, false, false, null)
+//            channel.queueDeclare(queueName, true, false, false, null)
             val messageBody = objectMapper.writeValueAsBytes(message)
             channel.basicPublish("", queueName, null, messageBody)
         }
@@ -42,7 +42,7 @@ class RabbitMQ(
 
     suspend fun receiveMessages(queueName: String): Flow<Message> = callbackFlow {
         val channel = connection.createChannel()
-        channel.queueDeclare(queueName, true, false, false, null)
+//        channel.queueDeclare(queueName, true, false, false, null)
 
         val consumer: Consumer = object : DefaultConsumer(channel) {
             override fun handleDelivery(
