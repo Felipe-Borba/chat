@@ -6,6 +6,9 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 public class Queue {
@@ -14,7 +17,7 @@ public class Queue {
     private final Channel channel;
     private final Serializer serializer;
 
-    Queue() throws IOException, TimeoutException {
+    Queue(List<String> users) throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
         factory.setPort(5672);
@@ -26,9 +29,18 @@ public class Queue {
         channel = connection.createChannel();
 
         channel.queueDelete(ENTRY_QUEUE);
-        channel.queueDeclare(ENTRY_QUEUE, true, false, false, null);
+        channel.queueDeclare(ENTRY_QUEUE, false, false, true, null);
 
         channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+
+        for (String user : users) {
+            channel.queueDelete(user);
+            Map<String, Object> argsMap = new HashMap<>();
+            argsMap.put("x-message-ttl", 60000);
+            argsMap.put("x-expires", 3600000);
+            channel.queueDeclare(user, false, false, true, argsMap);
+            channel.queueBind(user, EXCHANGE_NAME, "");
+        }
     }
 
     void onMessageReceived(OnMessage callback) {

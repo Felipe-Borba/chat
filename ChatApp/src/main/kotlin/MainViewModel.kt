@@ -25,6 +25,7 @@ class MainViewModel() : ViewModel() {
                         showLoginscren = false
                     )
 
+                    //Depois que o usuário digitar o name dele o cliente vai tentar se conectar na fila dele
                     viewModelScope.launch {
                         queue.receiveMessages(it).collect { message ->
                             state = state.copy(receivedMessages = state.receivedMessages + message)

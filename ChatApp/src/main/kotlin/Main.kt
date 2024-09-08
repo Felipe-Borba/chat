@@ -23,7 +23,7 @@ fun App() {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(if (viewModel.state.userName.isNullOrEmpty()) "Welcome ${viewModel.state.userName}" else "Welcome to the chat app")
+                Text(if (!viewModel.state.userName.isNullOrEmpty() && !viewModel.state.showLoginscren) "Welcome ${viewModel.state.userName}" else "Welcome to the chat app")
             }
         }) {
             if (viewModel.state.showLoginscren) {
