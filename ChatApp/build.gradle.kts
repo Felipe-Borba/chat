@@ -33,10 +33,19 @@ compose.desktop {
     application {
         mainClass = "MainKt"
 
+        buildTypes.release.proguard {
+            configurationFiles.from(project.file("compose-desktop.pro"))
+            obfuscate.set(true)
+        }
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "ChatApp"
             packageVersion = "1.0.0"
+            copyright = "© 2024 Felipe Borba. All rights reserved."
+            vendor = "felipe-borba"
+            includeAllModules = true
+            outputBaseDir.set(project.buildDir.resolve("output"))
+            appResourcesRootDir.set(project.layout.projectDirectory.dir("resources"))
         }
     }
 }
