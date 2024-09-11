@@ -12,7 +12,7 @@ public class Main {
         users.add("Leonardo");
         users.add("Jonatas");
 
-        Queue queue = new Queue(users);
+        Queue queue = new Queue();
         queue.onMessageReceived(message -> {
             if (users.contains(message.getSender())) {
                 queue.sendMessageToExitQueue(message);

@@ -16,6 +16,8 @@ data class Message(
 )
 
 class RabbitMQ() {
+    private val EXCHANGE_NAME = "MessageDistribution"
+
     private val connectionFactory: ConnectionFactory = ConnectionFactory().apply {
         this.host = "localhost"
         this.username = "guest"
@@ -41,6 +43,10 @@ class RabbitMQ() {
 
     suspend fun receiveMessages(queueName: String): Flow<Message> = callbackFlow {
         val channel = connection.createChannel()
+        val argsMap = mutableMapOf<String, Any>()
+        argsMap["x-message-ttl"] = 60000  // TTL para mensagens (em milissegundos)
+        channel.queueDeclare(queueName, false, true, true, argsMap);
+        channel.queueBind(queueName, EXCHANGE_NAME, "");
 
         val consumer: Consumer = object : DefaultConsumer(channel) {
             override fun handleDelivery(
