@@ -15,14 +15,11 @@ data class Message(
     val date: Instant
 )
 
-class RabbitMQ(
-    private val host: String = "localhost",
-) {
-//    private val EXCHANGE_NAME = "MessageDistribution";
-
-    //TODO change queue to senai server
+class RabbitMQ() {
     private val connectionFactory: ConnectionFactory = ConnectionFactory().apply {
-        this.host = host
+        this.host = "localhost"
+        this.username = "guest"
+        this.password = "guest"
     }
 
     private val connection: Connection by lazy {
