@@ -7,7 +7,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import java.time.Instant
@@ -18,11 +18,12 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun ChatScreen(
     state: MainState,
-    onAction: (MainAction) -> Unit
+    onAction: (MainAction) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier.weight(1f).padding(16.dp)
         ) {

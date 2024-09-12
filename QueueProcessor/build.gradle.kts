@@ -1,14 +1,11 @@
 plugins {
     id("java")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "com.felipeborba"
 version = "1.0-SNAPSHOT"
 
-//java {
-//    sourceCompatibility = JavaVersion.VERSION_19
-//    targetCompatibility = JavaVersion.VERSION_19
-//}
 
 repositories {
     mavenCentral()
@@ -23,6 +20,20 @@ dependencies {
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+}
+
+tasks {
+    shadowJar {
+        archiveBaseName.set("QueueProcessor")
+        archiveVersion.set("1.0-SNAPSHOT")
+
+        manifest {
+            attributes["Main-Class"] = "com.felipeborba.Main"
+        }
+    }
+}
+tasks.build {
+    dependsOn(tasks.shadowJar)
 }
 
 tasks.test {
