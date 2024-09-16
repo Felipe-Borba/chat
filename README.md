@@ -1,6 +1,12 @@
 # ChatApp
 
-Projeto de um Chat, utilizando-se um servidor multithreading, o qual recebe conexões dos clientes do Chat, através de socket, RMI ou mesmo Mensageria. O servidor precisa criar uma sala e os clientes devem escolher a sala de comunicação e então enviar mensagens para um usuário da sala, ou para todos. O servidor ao receber as mensagens, deve replicar para todos os usuários conectados na sala de discussão. Poderão usar persistência em banco de dados para as mensagens, salas e usuários, ou controlar via objetos em memória no servidor. Esses objetos necessariamente deverão ser compartilhados de alguma forma.
+rojeto de Chat com Servidor Multithreading
+
+O projeto visa criar um sistema de chat utilizando um servidor multithreading, que gerencia conexões de clientes por meio de sockets, RMI (Remote Method Invocation) ou sistemas de mensageria. O servidor deve ser capaz de criar e gerenciar salas de chat, permitindo que os clientes escolham uma sala para se conectar. Uma vez dentro de uma sala, os clientes poderão enviar mensagens tanto para usuários específicos quanto para todos os membros da sala.
+
+Ao receber uma mensagem, o servidor é responsável por replicá-la para todos os usuários conectados na mesma sala. A persistência de dados, como mensagens, salas e usuários, pode ser gerida através de um banco de dados, proporcionando armazenamento durável e robusto. Alternativamente, é possível utilizar objetos em memória para controle mais ágil e temporário dos dados, desde que esses objetos sejam adequadamente compartilhados e sincronizados entre as threads.
+
+Essa versão fornece uma explicação clara e concisa do objetivo do projeto, detalhando a funcionalidade do servidor e a abordagem para persistência de dados.
 
 ## Diagramas 📄
 
